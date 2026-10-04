@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ ok: false });
   try {
-    const webhook = process.env.https://discord.com/api/webhooks/1556094738841739274/KACJMOf59LVmlFrOPLVxBxom17iOfCREMU5RcFktH7zkkdH2YIxp3715tS8AXT7Ny0yk;
+    const webhook = process.env.DISCORD_WEBHOOK_URL;
     if (!webhook) return res.status(503).json({ ok: false });
     const body = typeof req.body === "string" ? JSON.parse(req.body) : (req.body || {});
     const clean = value => String(value || "").replace(/\x60/g, "'").slice(0, 200);
