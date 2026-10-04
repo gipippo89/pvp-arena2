@@ -3,7 +3,7 @@ export default async function handler(req,res){
   res.setHeader("Access-Control-Allow-Headers","Content-Type");
   if(req.method==="OPTIONS") return res.status(204).end();
   if(req.method!=="POST") return res.status(405).json({error:"Method not allowed"});
-  const webhook=process.env.DISCORD_WEBHOOK_URL;
+  const webhook=process.env.https://discord.com/api/webhooks/1556118895239372825/ZF7dVbs59IS63EApi5eBzw_di0tIP3YSP1rKSBELFPz_I3_IJa7mJBO34uuBkP-3qu0y;
   if(!webhook) return res.status(503).json({error:"Discord webhook non configurato"});
   const body=req.body||{};
   const text=[
