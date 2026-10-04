@@ -27,9 +27,9 @@ section{padding:35px 0 75px}.head{display:flex;justify-content:space-between;ali
 <div class="modal" id="modal"><div class="box"><h2>Crea torneo</h2><div class="field"><label>Nome torneo</label><input id="name" placeholder="Es. Summer Cup"></div><div class="field"><label>Gioco</label><input id="game" placeholder="Es. Fortnite"></div><div class="field"><label>Partecipanti</label><select id="players"><option>8</option><option>16</option><option>32</option><option>64</option><option>128</option></select></div><div class="row"><button class="primary ghost" onclick="closeModal()">Annulla</button><button class="primary" onclick="createTournament()">Crea</button></div></div></div>
 <script>
 const m=document.getElementById('modal');
-const ADMIN_HASH='f8f8f8f5d9c9b9c1f8c1a4f3c3a8d6d9c5f0e1b7b7f8a0f1b0a1c2d3e4f5a6b7';
+const ADMIN_HASH='53990fec7f6f30a456c905c9046d293cf379b952829d362079a502c02cc1b675';
 async function hashText(v){const data=new TextEncoder().encode(v);const hash=await crypto.subtle.digest('SHA-256',data);return [...new Uint8Array(hash)].map(x=>x.toString(16).padStart(2,'0')).join('')}
-async function unlockAdmin(){const input=document.getElementById('adminPass'),err=document.getElementById('adminError');err.textContent='';const ok=input.value==='Dragon133';if(ok){document.getElementById('adminLock').classList.remove('show');input.value='';document.getElementById('admin').scrollIntoView({behavior:'smooth'})}else{err.textContent='Password errata.';input.value='';input.focus()}}
+async function unlockAdmin(){const input=document.getElementById('adminPass'),err=document.getElementById('adminError');err.textContent='';const ok=(await hashText(input.value))===ADMIN_HASH;if(ok){document.getElementById('adminLock').classList.remove('show');input.value='';document.getElementById('admin').scrollIntoView({behavior:'smooth'})}else{err.textContent='Password errata.';input.value='';input.focus()}}
 document.getElementById('adminLogin').addEventListener('click',unlockAdmin);
 document.getElementById('adminPass').addEventListener('keydown',e=>{if(e.key==='Enter')unlockAdmin()});
 document.getElementById('adminNav').addEventListener('click',e=>{e.preventDefault();document.getElementById('adminLock').classList.add('show');document.getElementById('adminPass').focus()});
