@@ -1,25 +1,18 @@
-export default async function handler(req, res) {
-  if (req.method !== "POST") return res.status(405).json({ ok: false });
-  try {
-    const webhook = process.env.https://discord.com/api/webhooks/1556094738841739274/KACJMOf59LVmlFrOPLVxBxom17iOfCREMU5RcFktH7zkkdH2YIxp3715tS8AXT7Ny0yk;
-    if (!webhook) return res.status(503).json({ ok: false });
-    const body = typeof req.body === "string" ? JSON.parse(req.body) : (req.body || {});
-    const clean = value => String(value || "").replace(/\x60/g, "'").slice(0, 200);
-    const content = [
-      "🖱️ **Click registrato — PvP Arena**",
-      "🔘 Elemento: `" + clean(body.element) + "`",
-      body.id ? "🆔 ID: `" + clean(body.id) + "`" : null,
-      "🌐 Pagina: `" + clean(body.path || "/") + "`",
-      "🕐 Ora: " + clean(body.timestamp || new Date().toISOString())
-    ].filter(Boolean).join("\n");
-    const response = await fetch(webhook, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content, allowed_mentions: { parse: [] } })
-    });
-    if (!response.ok) return res.status(502).json({ ok: false });
-    return res.status(204).end();
-  } catch {
-    return res.status(400).json({ ok: false });
-  }
+export default async function handler(req,res){
+  res.setHeader("Access-Control-Allow-Origin","*");
+  res.setHeader("Access-Control-Allow-Headers","Content-Type");
+  if(req.method==="OPTIONS") return res.status(204).end();
+  if(req.method!=="POST") return res.status(405).json({error:"Method not allowed"});
+  const webhook=process.env.DISCORD_WEBHOOK_URL;
+  if(!webhook) return res.status(503).json({error:"Discord webhook non configurato"});
+  const body=req.body||{};
+  const text=[
+    "🖱️ **PvP Arena — Log sito**",
+    "**Azione:** "+String(body.element||"Sconosciuta").slice(0,100),
+    "**ID:** "+String(body.id||"-").slice(0,100),
+    "**Pagina:** "+String(body.path||"-").slice(0,200),
+    "**Ora:** "+String(body.timestamp||new Date().toISOString()).slice(0,80)
+  ].join("\n");
+  const r=await fetch(webhook,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({content:text,allowed_mentions:{parse:[]}})});
+  return res.status(r.ok?204:502).end();
 }
