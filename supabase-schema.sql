@@ -19,3 +19,4 @@ create table if not exists players (
  online boolean not null default false,
  updated_at timestamptz not null default now()
 );
+create unique index if not exists players_provider_user on players(provider,provider_id);
